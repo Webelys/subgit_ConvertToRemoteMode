@@ -21,7 +21,6 @@ do
     #trim space : http://stackoverflow.com/questions/20600982/remove-leading-and-trailing-space-in-field-in-awk
     #parse ini : http://stackoverflow.com/questions/6318809/how-do-i-grab-an-ini-value-within-a-shell-script
     svn_file_def="$repo_source/svn/.svngit/svngitkit.config"
-    svn_file_metadata="$repo_source/svn/.metadata"
 
     if [ ! -f "$svn_file_def" ]; then
             echo "No svn project set"
