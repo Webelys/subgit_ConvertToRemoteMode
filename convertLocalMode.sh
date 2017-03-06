@@ -41,5 +41,30 @@ do
             -i \
             $repo_convert/subgit/config
 
+        subgit install $repo_convert
+        subgit shutdown $repo_convert
+
+        ## OVERRIDE WITH OLD SHA-1
+        cp -far $repo_source/objects $repo_convert/
+
+        ## Manage svn data
+        rm -fr $repo_convert/svn/refs/svn/root
+        cp -far $repo_source/svn/refs/svn/root/$svn_path $repo_convert/svn/refs/svn/root
+        cp -far $repo_source/svn/.metadata $repo_convert/svn/
+
+        ## Manage refs
+        cp -far $repo_source/refs $repo_convert/
+        rm -fr $repo_convert/refs/svn/{root,attic}
+        cp -far $repo_source/refs/svn/root/$svn_path $repo_convert/refs/svn/root
+        cp -far $repo_source/refs/svn/attic/$svn_path $repo_convert/refs/svn/attic
+
+        git --git-dir=$repo_convert fetch --force $repo_source refs/svn/map:refs/svn/map
+
+        ## Get packed refs (if existing)
+        rm $repo_convert/packed-refs
+        cp -bar $repo_source/packed-refs $repo_convert/packed-refs
+
+        subgit fetch $repo_convert
+        subgit uninstall $repo_convert
 
 done <   <(find "$GIT_ROOT" -iname "*.git" -print0)
