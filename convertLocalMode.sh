@@ -42,43 +42,43 @@ do
     fi
 
     sed \
-            -e "s#shared =.*#shared = true#" \
-            -e "s#subversionConfigurationDirectory =.*#subversionConfigurationDirectory = $PROJECT_ROOT/.subversion#" \
-            -i \
-            "$repo_convert/subgit/config"
+        -e "s#shared =.*#shared = true#" \
+        -e "s#subversionConfigurationDirectory =.*#subversionConfigurationDirectory = $PROJECT_ROOT/.subversion#" \
+        -i \
+        "$repo_convert/subgit/config"
 
     if [ -n "$SUBGIT_AUTHORS_FILE" ]; then
         sed \
                 -e "s#authorsFile =.*#authorsFile = $SUBGIT_AUTHORS_FILE#"
     fi
     
-        subgit install "$repo_convert"
-        subgit shutdown "$repo_convert"
+    subgit install "$repo_convert"
+    subgit shutdown "$repo_convert"
 
-        ## OVERRIDE WITH OLD SHA-1
-        cp -far "$repo_source/objects" "$repo_convert/"
+    ## OVERRIDE WITH OLD SHA-1
+    cp -far "$repo_source/objects" "$repo_convert/"
 
-        ## Manage svn data
-        rm -fr "$repo_convert/svn/refs/svn/root"
-        cp -far "$repo_source"/svn/refs/svn/root/"$svn_path" "$repo_convert"/svn/refs/svn/root
-        cp -far "$repo_source"/svn/.metadata "$repo_convert"/svn/
+    ## Manage svn data
+    rm -fr "$repo_convert/svn/refs/svn/root"
+    cp -far "$repo_source"/svn/refs/svn/root/"$svn_path" "$repo_convert"/svn/refs/svn/root
+    cp -far "$repo_source"/svn/.metadata "$repo_convert"/svn/
 
-        ## Manage refs
-        cp -far "$repo_source"/refs "$repo_convert"/
-        rm -fr "$repo_convert"/refs/svn/{root,attic}
-        cp -far "$repo_source"/refs/svn/root/"$svn_path" "$repo_convert"/refs/svn/root
-        cp -far "$repo_source"/refs/svn/attic/"$svn_path" "$repo_convert"/refs/svn/attic
+    ## Manage refs
+    cp -far "$repo_source"/refs "$repo_convert"/
+    rm -fr "$repo_convert"/refs/svn/{root,attic}
+    cp -far "$repo_source"/refs/svn/root/"$svn_path" "$repo_convert"/refs/svn/root
+    cp -far "$repo_source"/refs/svn/attic/"$svn_path" "$repo_convert"/refs/svn/attic
 
-        git --git-dir="$repo_convert" fetch --force "$repo_source" refs/svn/map:refs/svn/map
+    git --git-dir="$repo_convert" fetch --force "$repo_source" refs/svn/map:refs/svn/map
 
-        ## Get packed refs (if existing)
-        rm "$repo_convert"/packed-refs
-        cp -bar "$repo_source"/packed-refs "$repo_convert"/packed-refs
+    ## Get packed refs (if existing)
+    rm "$repo_convert"/packed-refs
+    cp -bar "$repo_source"/packed-refs "$repo_convert"/packed-refs
 
-        ##Remove remotes
-        git --git-dir="$repo_convert" branch -rd "$(git --git-dir=$repo_convert branch -r)"
+    ##Remove remotes
+    git --git-dir="$repo_convert" branch -rd "$(git --git-dir=$repo_convert branch -r)"
 
-        subgit fetch "$repo_convert"
-        subgit uninstall "$repo_convert"
+    subgit fetch "$repo_convert"
+    subgit uninstall "$repo_convert"
 
 done <   <(find "$GIT_REPO" -iname "*.git" -print0)
