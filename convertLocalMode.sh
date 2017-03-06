@@ -76,7 +76,7 @@ do
     cp -bar "$repo_source"/packed-refs "$repo_convert"/packed-refs
 
     ##Remove remotes
-    git --git-dir="$repo_convert" branch -rd "$(git --git-dir=$repo_convert branch -r)"
+    git --git-dir="$repo_convert" branch -rd $(git --git-dir="$repo_convert" branch -r)
 
     subgit fetch "$repo_convert"
     subgit uninstall "$repo_convert"
