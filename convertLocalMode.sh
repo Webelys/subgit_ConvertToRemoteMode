@@ -2,7 +2,7 @@
 
 . convertLocalMode.conf
 
-if [ -z "$GIT_ROOT" ]; then
+if [ -z "$GIT_REPO" ]; then
     echo "Set a git repository first"
     exit 1
 fi
