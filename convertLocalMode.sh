@@ -7,6 +7,12 @@ if [ -z "$GIT_REPO" ]; then
     exit 1
 fi
 
+if [ ! -d "$CONVERT_REPO" ]; then
+    echo "Convert target directory misingh : $CONVERT_REPO"
+    exit 1
+fi
+
+
 while IFS= read -r -d '' repo_source
 do
     echo "$repo_source"
