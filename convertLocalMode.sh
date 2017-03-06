@@ -32,7 +32,9 @@ do
     ## GENERATE svn remote git copy
     subgit configure "$SVN_URL/$svn_path" "$repo_convert"
 
-    echo "$SVN_SUBGIT_USER $SVN_SUBGIT_PASSWORD" > $repo_convert/subgit/passwd
+    if [ -n "$SVN_SUBGIT_USER" ] && [ -n "$SVN_SUBGIT_PASSWORD" ]; then
+        echo "$SVN_SUBGIT_USER $SVN_SUBGIT_PASSWORD" > $repo_convert/subgit/passwd
+    fi
 
     sed \
             -e "s#shared =.*#shared = true#" \
