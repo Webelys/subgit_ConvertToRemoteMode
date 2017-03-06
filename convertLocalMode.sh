@@ -43,11 +43,15 @@ do
 
     sed \
             -e "s#shared =.*#shared = true#" \
-            -e "s#authorsFile =.*#authorsFile = $PROJECT_ROOT/subgit/authors.sh#" \
             -e "s#subversionConfigurationDirectory =.*#subversionConfigurationDirectory = $PROJECT_ROOT/.subversion#" \
             -i \
             "$repo_convert/subgit/config"
 
+    if [ -n "$SUBGIT_AUTHORS_FILE" ]; then
+        sed \
+                -e "s#authorsFile =.*#authorsFile = $SUBGIT_AUTHORS_FILE#"
+    fi
+    
         subgit install "$repo_convert"
         subgit shutdown "$repo_convert"
 
