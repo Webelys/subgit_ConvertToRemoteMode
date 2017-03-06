@@ -77,4 +77,4 @@ do
         subgit fetch "$repo_convert"
         subgit uninstall "$repo_convert"
 
-done <   <(find "$GIT_ROOT" -iname "*.git" -print0)
+done <   <(find "$GIT_REPO" -iname "*.git" -print0)
