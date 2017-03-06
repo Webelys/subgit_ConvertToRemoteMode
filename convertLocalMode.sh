@@ -49,7 +49,7 @@ do
 
     if [ -n "$SUBGIT_AUTHORS_FILE" ]; then
         sed \
-                -e "s#authorsFile =.*#authorsFile = $SUBGIT_AUTHORS_FILE#"
+            -e "s#authorsFile =.*#authorsFile = $SUBGIT_AUTHORS_FILE#"
     fi
     
     subgit install "$repo_convert"
