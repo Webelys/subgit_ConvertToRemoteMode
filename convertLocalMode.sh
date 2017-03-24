@@ -66,14 +66,20 @@ do
     ## Manage refs
     cp -far "$repo_source"/refs "$repo_convert"/
     rm -fr "$repo_convert"/refs/svn/{root,attic}
-    cp -far "$repo_source"/refs/svn/root/"$svn_path" "$repo_convert"/refs/svn/root
-    cp -far "$repo_source"/refs/svn/attic/"$svn_path" "$repo_convert"/refs/svn/attic
+    if [ -d "$repo_source"/refs/svn/root/"$svn_path" ]; then
+        cp -far "$repo_source"/refs/svn/root/"$svn_path" "$repo_convert"/refs/svn/root
+    fi
+    if [ -d "$repo_source"/refs/svn/attic/"$svn_path" ]; then
+        cp -far "$repo_source"/refs/svn/attic/"$svn_path" "$repo_convert"/refs/svn/attic
+    fi
 
     git --git-dir="$repo_convert" fetch --force "$repo_source" refs/svn/map:refs/svn/map
 
     ## Get packed refs (if existing)
     rm "$repo_convert"/packed-refs
-    cp -bar "$repo_source"/packed-refs "$repo_convert"/packed-refs
+    if [ -f "$repo_source"/packed-refs ]; then
+        cp -bar "$repo_source"/packed-refs "$repo_convert"/packed-refs
+    fi
 
     ##Remove remotes
     git --git-dir="$repo_convert" branch -rd $(git --git-dir="$repo_convert" branch -r)
